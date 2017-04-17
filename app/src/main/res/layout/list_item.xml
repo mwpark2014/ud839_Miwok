@@ -11,11 +11,9 @@
         android:id="@+id/miwok"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:text="lutti"
         android:textStyle="bold"/>
 
     <TextView
-        android:text="english"
         android:id="@+id/english"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>

@@ -43,5 +43,5 @@ public class Word {
         return mImageResourceId;
     }
 
-    public boolean hasImage() {return mImageResourceId == NO_IMAGE_PROVIDED;}
+    public boolean hasImage() {return mImageResourceId != NO_IMAGE_PROVIDED;}
 }

@@ -29,14 +29,16 @@ public class FamilyActivity extends AppCompatActivity {
         setContentView(R.layout.root_view);
 
         ArrayList<Word> words = new ArrayList<Word>();
-        words.add(new Word("red", "wetetti"));
-        words.add(new Word("green", "chokokki"));
-        words.add(new Word("brown", "takaakki"));
-        words.add(new Word("gray", "topoppi"));
-        words.add(new Word("black", "kululli"));
-        words.add(new Word("white", "kelelli"));
-        words.add(new Word("dusty yellow", "topiise"));
-        words.add(new Word("mustard yellow", "chiwiite"));
+        words.add(new Word("father", "epe", R.drawable.family_father));
+        words.add(new Word("mother", "eta", R.drawable.family_mother));
+        words.add(new Word("son", "angsi", R.drawable.family_son));
+        words.add(new Word("daughter", "tune", R.drawable.family_daughter));
+        words.add(new Word("older brother", "taachi", R.drawable.family_older_brother));
+        words.add(new Word("younger brother", "chalitti", R.drawable.family_younger_brother));
+        words.add(new Word("older sister", "tete", R.drawable.family_older_sister));
+        words.add(new Word("younger sister", "kolliti", R.drawable.family_younger_sister));
+        words.add(new Word("grandmother", "ama", R.drawable.family_grandmother));
+        words.add(new Word("grandfather", "paapa", R.drawable.family_grandfather));
 
         WordAdapter itemsAdapter = new WordAdapter(this, words);
         ListView listview = (ListView)findViewById(R.id.rootView);

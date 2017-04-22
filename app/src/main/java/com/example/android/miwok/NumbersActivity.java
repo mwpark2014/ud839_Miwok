@@ -15,6 +15,7 @@
  */
 package com.example.android.miwok;
 
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,12 +27,47 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class NumbersActivity extends AppCompatActivity {
+    private MediaPlayer mMediaPlayer;
+    private AudioManager mAudioManager;
+    private MediaPlayer.OnCompletionListener mCompletionListener =
+            new MediaPlayer.OnCompletionListener() {@Override public void
+            onCompletion(MediaPlayer mp){releaseMediaPlayer();}};
+    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener =
+            new AudioManager.OnAudioFocusChangeListener() {@Override public void
+                onAudioFocusChange(int focusChange){
+                switch (focusChange) {
+                    case AudioManager.AUDIOFOCUS_GAIN:
+                        mMediaPlayer.start();
+                        // Set volume level to desired levels
+                        break;
+                    case AudioManager.AUDIOFOCUS_GAIN_TRANSIENT:
+                        mMediaPlayer.start();
+                        break;
+                    case AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK:
+                        mMediaPlayer.start();
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS:
+                        mMediaPlayer.stop();
+                        releaseMediaPlayer();
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                        mMediaPlayer.pause();
+                        //mMediaPlayer.seekTo(0);
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                        mMediaPlayer.pause();
+                        //mMediaPlayer.seekTo(0);
+                        break;
+                }
+            }
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.root_view);
 
+        mAudioManager = (AudioManager)getSystemService(getApplicationContext().AUDIO_SERVICE);
         ArrayList<Word> words = new ArrayList<Word>();
         words.add(new Word("One", "lutti", R.raw.number_one));
         words.add(new Word("Two", "otiiko", R.raw.number_two));
@@ -53,10 +89,30 @@ public class NumbersActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Word word = (Word)parent.getAdapter().getItem(position);
-                MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(),
-                        word.getAudioResourceId());
-                mediaPlayer.start(); // no need to call prepare(); create() does that for you
+                releaseMediaPlayer();
+
+                int result = mAudioManager.requestAudioFocus(mOnAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+                if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    mMediaPlayer = MediaPlayer.create(getApplicationContext(),
+                            word.getAudioResourceId());
+                    mMediaPlayer.start(); // no need to call prepare(); create() does that for you
+
+                    mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                }
             }
         });
-    }
+        }
+        @Override
+        protected void onStop() {
+            super.onStop();
+            releaseMediaPlayer();
+        }
+
+        private void releaseMediaPlayer() {
+            if (mMediaPlayer != null) {
+                mMediaPlayer.release();
+            }
+            mMediaPlayer = null;
+            mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
+        }
 }

@@ -1,6 +1,7 @@
 package com.example.android.miwok;
 
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -73,7 +74,8 @@ public class FamilyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.list_item, container, false);
+        View rootView = inflater.inflate(R.layout.root_view, container, false);
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         ArrayList<Word> words = new ArrayList<Word>();
         words.add(new Word("father", "epe", R.drawable.family_father, R.raw.family_father));
         words.add(new Word("mother", "eta", R.drawable.family_mother, R.raw.family_mother));

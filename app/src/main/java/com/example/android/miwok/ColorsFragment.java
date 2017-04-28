@@ -1,6 +1,7 @@
 package com.example.android.miwok;
 
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -73,7 +74,8 @@ public class ColorsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.list_item, container, false);
+        View rootView = inflater.inflate(R.layout.root_view, container, false);
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         final ArrayList<Word> words = new ArrayList<Word>();
         words.add(new Word("red", "wetetti", R.raw.color_red));
         words.add(new Word("green", "chokokki", R.raw.color_green));
